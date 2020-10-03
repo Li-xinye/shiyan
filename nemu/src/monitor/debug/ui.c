@@ -37,7 +37,8 @@ static int cmd_q(char *args) {
 }
 static int cmd_info(char *args)
 {
-    if(strcmp(args,"r")==0)
+    char *arg=strtok(args," ");
+    if(strcmp(arg,"r")==0)
     {
         printf("eax 0x%x %d\n",cpu.eax,cpu.eax);
         printf("edx 0x%x %d\n",cpu.edx,cpu.edx);
