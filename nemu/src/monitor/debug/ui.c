@@ -35,6 +35,21 @@ static int cmd_c(char *args) {
 static int cmd_q(char *args) {
 	return -1;
 }
+static int cmd_info(char *args)
+{
+    if(strcmp(args,"r")==0)
+    {
+        printf("eax 0x%x %d\n",cpu.eax,cpu.eax);
+        printf("edx 0x%x %d\n",cpu.edx,cpu.edx);
+        printf("ecx 0x%x %d\n",cpu.ecx,cpu.ecx);
+        printf("ebx 0x%x %d\n",cpu.ebx,cpu.edx);
+        printf("ebp 0x%x %d\n",cpu.ebp,cpu.ebp);
+        printf("esi 0x%x %d\n",cpu.esi,cpu.esi);
+        printf("edi 0x%x %d\n",cpu.edi,cpu.edi);
+        printf("esp 0x%x %d\n",cpu.esp,cpu.esp);
+    }
+    return 0; 
+}
 
 static int cmd_help(char *args);
 static int cmd_si(char *args);
@@ -48,7 +63,7 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
         { "si","Executes N steps of the program,if N is not inserted,executes one step",cmd_si},
-
+        {"info","r -print the registers",cmd_info},
 	/* TODO: Add more commands */
 
 };
