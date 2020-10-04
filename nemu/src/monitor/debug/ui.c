@@ -62,7 +62,7 @@ static int cmd_x(char *args)
     sscanf(arg2,"%x",&address);
     while(n--)
     {
-        printf("0x%x\n",lnaddr_read(address,4));
+        printf("%x",lnaddr_read(address,4));
         address+=4;
     }
     return 0;
