@@ -51,7 +51,22 @@ static int cmd_info(char *args)
     }
     return 0; 
 }
-
+static int cmd_x(char *args)
+{
+    
+    char *arg1=strtok(NULL," ");
+    char *arg2=strtok(NULL," ");
+    int n;
+    lnaddr_t address;
+    sscanf(arg1,"%d",&n);
+    sscanf(arg2,"%x",&address);
+    while(n--)
+    {
+        printf("0x%x\n",lnaddr_read(address,4));
+        address+=4;
+    }
+    return 0;
+}
 
 static int cmd_help(char *args);
 static int cmd_si(char *args);
@@ -66,7 +81,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
         { "si","Executes N steps of the program,if N is not inserted,executes one step",cmd_si},
         { "info", "r -print the registers",cmd_info},
-        
+        { "x", "Caculate the expression and print the content of the address",cmd_x}, 
 	/* TODO: Add more commands */
 
 };
