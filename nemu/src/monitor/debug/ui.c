@@ -82,7 +82,8 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
         { "si","Executes N steps of the program,if N is not inserted,executes one step",cmd_si},
         { "info", "r -print the registers",cmd_info},
-        { "x", "Caculate the expression and print the content of the address",cmd_x}, 
+        { "x", "Caculate the expression and print the content of the address",cmd_x},
+         
 	/* TODO: Add more commands */
 
 };

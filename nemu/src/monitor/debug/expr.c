@@ -96,8 +96,11 @@ static bool make_token(char *e) {
                                             tokens[nr_token].type=rules[i].token_type;
                                             strncpy(tokens[nr_token].str,substr_start,substr_len);
                                             nr_token++;
-                                            tokens[nr_token].str[substr_len]='\0'; 
+                                            tokens[nr_token].str[substr_len]='\0';
+                                            break; 
                                         }
+                                        case NOTYPE:
+                                             break;
 					default: panic("please implement me");
 				}
 
@@ -113,7 +116,23 @@ static bool make_token(char *e) {
 
 	return true; 
 }
-
+bool check_parentheses(int p,int q)
+{
+    int i, tag=0;
+    if(tokens[p].type != '(' || tokens[q].type != ')')
+        return false;
+    for(i=p ; i<=q ;i++)
+    {
+        if( tokens[i].type=='(')
+            tag++;
+        else if(tokens[i].type==')')
+            tag--;
+        if(tag==0&&i<q)
+            return false;
+    }
+    if(tag!=0) return false;
+    return true;
+}
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
