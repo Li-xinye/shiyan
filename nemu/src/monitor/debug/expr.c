@@ -113,7 +113,6 @@ static bool make_token(char *e) {
 			return false;
 		}
 	}
-
 	return true; 
 }
 bool check_parentheses(int p,int q)
@@ -133,10 +132,41 @@ bool check_parentheses(int p,int q)
     if(tag!=0) return false;
     return true;
 }
+int priority(char t)
+{
+    int tag=0;
+    if(t=='+'||t=='-')
+        tag=1;
+    else if(t=='*'||t=='/')
+        tag=2;
+    return tag;
+}
 int dominant_operation(int p,int q)
 {
-    
+    int i,j,dom=p,tag=0,pri=-1;
+    for(i=p;i<=q;i++)
+    {
+        if(tokens[i].type=='(')
+        {
+            tag++;
+            i++;
+            for(j=i;j<=q;j++)
+            {
+                if(tokens[j].type=='(') tag++;
+                else if(tokens[j].type==')') tag--;
+                if(tag==0) break;
+            }
+        }
+        else if(tokens[i].type==D_NUM) continue;
+        else if(priority(tokens[i].type)>=pri)
+              {
+                  pri=priority(tokens[i].type);
+                  dom=i;
+              }
+    }
+    return dom;
 }
+
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
