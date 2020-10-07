@@ -133,6 +133,10 @@ bool check_parentheses(int p,int q)
     if(tag!=0) return false;
     return true;
 }
+int dominant_operation(int p,int q)
+{
+    
+}
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
