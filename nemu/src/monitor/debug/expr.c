@@ -143,7 +143,7 @@ int priority(char t)
 }
 int dominant_operation(int p,int q)
 {
-    int i,j,dom=p,tag=0,pri=-1;
+    int i,j,oper=p,tag=0,pri=10;
     for(i=p;i<=q;i++)
     {
         if(tokens[i].type=='(')
@@ -158,13 +158,13 @@ int dominant_operation(int p,int q)
             }
         }
         else if(tokens[i].type==D_NUM) continue;
-        else if(priority(tokens[i].type)>=pri)
+        else if(priority(tokens[i].type)<=pri)
               {
                   pri=priority(tokens[i].type);
-                  dom=i;
+                  oper=i;
               }
     }
-    return dom;
+    return oper;
 }
 
 uint32_t expr(char *e, bool *success) {
@@ -177,4 +177,31 @@ uint32_t expr(char *e, bool *success) {
 	panic("please implement me");
 	return 0;
 }
+uint32_t eval(int p;int q)
+{
+    if(p > q)
+        {
+        
+        }
+    else if(p==q)
+         {
 
+         }
+    else if(check_parentheses(p,q)==true)
+       {
+            return eval(p+1,q-1);
+       }
+    else
+       {
+           int op=dominant_operator(p,q);
+           uint32_t value1 = eval(p,op-1);
+           uint32_t vakye2 = eval(op+1,q);
+           switch (tokens[op].type){
+               case '+' : return value1+value2;
+               case '-' : return value1-value2;
+               case '*' : return value1*value2;
+               case '/' : return value1/value2;
+               default : assert(0);
+           }
+       }
+}
