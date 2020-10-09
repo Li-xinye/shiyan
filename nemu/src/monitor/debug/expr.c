@@ -157,8 +157,9 @@ int dominant_operation(int p,int q)
                 if(tag==0) break;
             }
         }
-        else if(tokens[i].type==D_NUM) continue;
-        else if(priority(tokens[i].type)<=pri)
+        if(tokens[i].type==D_NUM)
+              continue;
+        if(priority(tokens[i].type)<=pri)
               {
                   pri=priority(tokens[i].type);
                   oper=i;
@@ -175,10 +176,12 @@ uint32_t expr(char *e, bool *success) {
 
 	/* TODO: Insert codes to evaluate the expression. */
         else
+        {
             *success=true;
-        if(!success)
-            panic("Please implement me");
-	return eval(0,nr_token-1);
+       	    return eval(0,nr_token-1);
+        }
+        panic("Please implement me");
+        return 0;
 }
 uint32_t eval(int p,int q)
 {
@@ -203,10 +206,10 @@ uint32_t eval(int p,int q)
            uint32_t value1 = eval(p,op-1);
            uint32_t value2 = eval(op+1,q);
            switch (tokens[op].type){
-               case '+' : return value1+value2;
-               case '-' : return value1-value2;
-               case '*' : return value1*value2;
-               case '/' : return value1/value2;
+               case '+' : return value1 + value2;
+               case '-' : return value1 - value2;
+               case '*' : return value1 * value2;
+               case '/' : return value1 / value2;
                default : assert(0);
            }
        }
