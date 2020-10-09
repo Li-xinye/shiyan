@@ -132,7 +132,7 @@ bool check_parentheses(int p,int q)
     if(tag!=0) return false;
     return true;
 }
-int priority(char t)
+int priority(int t)
 {
     int tag=0;
     if(t=='+'||t=='-')
