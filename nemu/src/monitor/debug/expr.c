@@ -143,19 +143,21 @@ int priority(int t)
 }
 int dominant_operation(int p,int q)
 {
-    int i,j,oper=p,tag=0,pri=10;
+    int i,oper=p,tag=0,pri=10;
     for(i=p;i<=q;i++)
     {
         if(tokens[i].type=='(')
         {
             tag++;
             i++;
-            for(j=i;j<=q;j++)
+            while(1)
             {
-                if(tokens[j].type=='(') tag++;
-                else if(tokens[j].type==')') tag--;
+                if(tokens[i].type=='(') tag++;
+                else if(tokens[i].type==')') tag--;
+		i++;
                 if(tag==0) break;
             }
+	    if(i>q) break;
         }
         if(tokens[i].type==D_NUM)
               continue;
