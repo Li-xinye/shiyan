@@ -177,25 +177,28 @@ uint32_t expr(char *e, bool *success) {
 	panic("please implement me");
 	return 0;
 }
-uint32_t eval(int p;int q)
+uint32_t eval(int p,int q)
 {
     if(p > q)
         {
-        
+            printf("Bad expression!");
+            return 0; 
         }
     else if(p==q)
          {
-
+             uint32_t n;
+             n=sscanf(tokens[p].str,"%d",&n);
+             return n;
          }
-    else if(check_parentheses(p,q)==true)
+    else if(check_parentheses(p,q))
        {
             return eval(p+1,q-1);
        }
     else
        {
-           int op=dominant_operator(p,q);
+           int op=dominant_operation(p,q);
            uint32_t value1 = eval(p,op-1);
-           uint32_t vakye2 = eval(op+1,q);
+           uint32_t value2 = eval(op+1,q);
            switch (tokens[op].type){
                case '+' : return value1+value2;
                case '-' : return value1-value2;
