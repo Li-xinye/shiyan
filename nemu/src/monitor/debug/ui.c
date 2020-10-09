@@ -69,6 +69,15 @@ static int cmd_x(char *args)
     return 0;
 }
 
+static int cmd_p(char *args)
+{
+    uint32_t n;
+    bool suc;
+    n=expr(args,&suc);
+    if (suc)
+         printf("%d\n",n);
+    return 0;
+}
 static int cmd_help(char *args);
 static int cmd_si(char *args);
 
@@ -83,7 +92,7 @@ static struct {
         { "si","Executes N steps of the program,if N is not inserted,executes one step",cmd_si},
         { "info", "r -print the registers",cmd_info},
         { "x", "Caculate the expression and print the content of the address",cmd_x},
-         
+        { "p", "Caculate the value of the expression",cmd_p}, 
 	/* TODO: Add more commands */
 
 };
