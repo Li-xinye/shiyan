@@ -106,9 +106,11 @@ bool check_wp()
 	return k;
 }
 
-
-
-
-
+void delete_wp(int n)
+{
+	WP *f;
+	f = &wp_pool[n];
+	free_wp(f);
+}
 
 
