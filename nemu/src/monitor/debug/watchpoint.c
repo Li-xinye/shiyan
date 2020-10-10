@@ -113,4 +113,14 @@ void delete_wp(int n)
 	free_wp(f);
 }
 
+void info_wp()
+{
+        WP *f;
+        f=head;
+        while (f!=NULL)
+        {
+                printf("Watchpoint %d: %s = %d\n",f->NO,f->expr,f->value);
+                f = f->next;
+        }
+}
 
