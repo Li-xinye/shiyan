@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ,D_NUM
+	NOTYPE = 256, EQ=254,D_NUM=250,HEX_NUM=245,REG=240,UEQ=235,AND=230,OR=225
 
 	/* TODO: Add more token types */
 
@@ -26,11 +26,18 @@ static struct rule {
 	{"\\+", '+'},					// plus
 	{"==", EQ},						// equal
         {"\\-",'-'},
-        {"\\*",'*'},
+        {"\\*",'*'},				
         {"\\/",'/'},
         {"\\(",'('},
         {"\\)",')'},
-        {"\\b[0-9]+\\b",D_NUM}
+        {"\\b[0-9]+\\b",D_NUM},
+	{"\\0[xX][0-9a-fA-F]+\\b",HEX_NUM},
+	{"\\$[a-zA-Z]+\\b",REG},
+        {"!=",UEQ},
+	{"!",'!'},
+	{"&&",AND},
+	{"\\|\\|",OR}
+	
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -75,7 +82,7 @@ static bool make_token(char *e) {
 			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
-
+				char *tmp = e + position + 1;
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
@@ -92,6 +99,13 @@ static bool make_token(char *e) {
                                         case '(':
                                         case ')':
                                         case D_NUM:
+					case HEX_NUM:
+					case UEQ:
+					case '!':
+					case AND:
+					case OR:
+					case EQ:
+					
                                         {
                                             tokens[nr_token].type=rules[i].token_type;
                                             strncpy(tokens[nr_token].str,substr_start,substr_len);
@@ -101,6 +115,14 @@ static bool make_token(char *e) {
                                         }
                                         case NOTYPE:
                                              break;
+					case REG:
+					{
+					    tokens[nr_token].type=rules[i].token_type;
+					    strncpy(tokens[nr_token].str,tmp,substr_len-1);
+					    nr_token++;
+					    tokens[nr_token].str[substr_len]='\0';
+					    break;  
+					}
 					default: panic("please implement me");
 				}
 
@@ -134,12 +156,20 @@ bool check_parentheses(int p,int q)
 }
 int priority(int t)
 {
-    int tag=0;
-    if(t=='+'||t=='-')
-        tag=1;
-    else if(t=='*'||t=='/')
-        tag=2;
-    return tag;
+	int tag=0;
+	if(t=='+'||t=='-')
+        	tag=4;
+	else if(t=='*'||t=='/')
+        	tag=5;
+	else if(t==OR)
+		tag=1;
+	else if(t==AND)
+		tag=2;
+	else if(t==EQ||t==UEQ)
+		tag=3;
+	else if(t=='!')
+		tag=6;
+	return tag;
 }
 int dominant_operation(int p,int q)
 {
@@ -159,7 +189,7 @@ int dominant_operation(int p,int q)
             }
 	    if(i>q) break;
         }
-        if(tokens[i].type==D_NUM)
+        if(tokens[i].type==D_NUM||tokens[i].type==HEX_NUM||tokens[i].type==REG)
               continue;
         if(priority(tokens[i].type)<=pri)
               {
@@ -187,17 +217,27 @@ uint32_t expr(char *e, bool *success) {
 }
 uint32_t eval(int p,int q)
 {
-    if(p > q)
+	if(p > q)
         {
-            printf("Bad expression!");
-            return 0; 
+        	printf("Bad expression!");
+            	return 0; 
         }
-    else if(p==q)
-         {
-             uint32_t n;
-             sscanf(tokens[p].str,"%d",&n);
-             return n;
-         }
+	else if(p==q)
+        {
+        	uint32_t n;
+	        if(tokens[p].type==D_NUM)
+             		sscanf(tokens[p].str,"%d",&n);
+	        if(tokens[p].type==HEX_NUM)
+			sscanf(tokens[p].str,"%x",&n);
+	        if(tokens[p].type==REG)
+		{
+			while(strlen (tokens[p].str) == 3)
+			{
+				
+			}
+		}
+                return n;
+        }
     else if(check_parentheses(p,q))
        {
             return eval(p+1,q-1);
