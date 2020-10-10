@@ -231,9 +231,34 @@ uint32_t eval(int p,int q)
 			sscanf(tokens[p].str,"%x",&n);
 	        if(tokens[p].type==REG)
 		{
-			while(strlen (tokens[p].str) == 3)
+			if (strlen (tokens[p].str) == 3)
 			{
-				
+				int i;
+				for( i=R_EAX;i<=R_EDI;i++ )
+					if (strcmp (tokens[p].str,regsl[i])==0)
+						break;
+				if ( i>R_EDI )
+					if (strcmp (tokens[p].str,"eip") == 0)
+						n = cpu.eip;
+				if( i<=R_EDI)	n=reg_l(i);
+			}
+			if ( strlen (tokens[p].str) == 2 )
+			{
+				if (tokens[p].str[1]=='x'||tokens[p].str[1]=='p'||tokens[p].str[1]=='i')
+				{
+					int i;
+					for ( i=R_AX;i<=R_DI;i++ )
+						if ( strcmp (tokens[p].str,regsw[i])==0 )
+					n = reg_w(i);
+				}	
+				if ( tokens[p].str[1]=='l'||tokens[p].str[1]=='h' )
+				{
+					int i;
+					for ( i=R_AL;i<=R_BH;i++ )
+						if (strcmp(tokens[p].str,regsb[i])==0)
+							break;
+					n=reg_b(i);
+				}
 			}
 		}
                 return n;
@@ -252,6 +277,10 @@ uint32_t eval(int p,int q)
                case '-' : return value1 - value2;
                case '*' : return value1 * value2;
                case '/' : return value1 / value2;
+	       case EQ : return value1 == value2;
+	       case UEQ : return value1 != value2;
+	       case AND : return value1 && value2;
+	       case OR : return value1 || value2;
                default : assert(0);
            }
        }
