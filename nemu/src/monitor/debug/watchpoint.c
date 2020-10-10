@@ -78,7 +78,33 @@ void free_wp (WP *wp)
 	wp->expr[0]='\0';
 }
 
-
+bool check_wp()
+{
+	WP *f;
+	f = head;
+	bool k=true;
+	bool success;
+	while(f != NULL)
+	{
+		uint32_t expr1=expr(f->expr,&success);
+		if(!success)
+			assert(1);
+		if(expr1 != f->value)
+		{
+			k=false;
+			if(f->b)
+			{
+				printf("Breakpoint %d at 0x%08x\n",f->b,cpu.eip);
+				f = f->next;
+				continue;
+			}
+			printf ("Watchpoint %d: %s\n",f->NO,f->expr);
+			printf ("New value = %d\n",expr1);
+			f->value = expr1;
+		}
+	}
+	return k;
+}
 
 
 
