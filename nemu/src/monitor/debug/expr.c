@@ -270,6 +270,16 @@ uint32_t eval(int p,int q)
     else
        {
            int op=dominant_operation(p,q);
+	   if(tokens[op].type=='!')
+	   {
+	   	uint32_t value = eval(p+1,q);
+	        switch(tokens[p].type)
+	 	{
+			case '!':return !value;
+		}
+
+
+	   }
            uint32_t value1 = eval(p,op-1);
            uint32_t value2 = eval(op+1,q);
            switch (tokens[op].type){
