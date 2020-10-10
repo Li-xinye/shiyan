@@ -49,6 +49,10 @@ static int cmd_info(char *args)
         printf("edi 0x%x %d\n",cpu.edi,cpu.edi);
         printf("esp 0x%x %d\n",cpu.esp,cpu.esp);
     }
+    if(strcmp(arg,"w")==0)
+    {
+        info_wp();
+    }
     return 0; 
 }
 static int cmd_x(char *args)
@@ -78,6 +82,27 @@ static int cmd_p(char *args)
          printf("%d\n",n);
     return 0;
 }
+static int cmd_w(char *args)
+{
+	WP *f;
+	bool success;
+	f = new_wp();
+	printf("Watchpoint %d: %s\n",f->NO,args);
+	f->value = expr(args,&success);
+	strcpy(f->expr,args);
+	if(!success) Assert(1,"wrong\n");
+	printf("Value : %d\n",f->value);
+	return 0;
+		
+}
+
+static int cmd_d(char *args)
+{
+	int n;
+	sscanf(args,"%d",&n);
+	delete_wp(n);
+	return 0;
+}
 static int cmd_help(char *args);
 static int cmd_si(char *args);
 
@@ -90,9 +115,11 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
         { "si","Executes N steps of the program,if N is not inserted,executes one step",cmd_si},
-        { "info", "r -print the registers",cmd_info},
+        { "info", "r -print the registers,w -print watchpoints",cmd_info},
         { "x", "Caculate the expression and print the content of the address",cmd_x},
-        { "p", "Caculate the value of the expression",cmd_p}, 
+        { "p", "Caculate the value of the expression",cmd_p},
+	{ "w", "Setting watchpoint",cmd_w},
+	{ "d", "Delete watchpoint",cmd_d},
 	/* TODO: Add more commands */
 
 };
