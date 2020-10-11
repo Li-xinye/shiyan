@@ -62,8 +62,9 @@ static int cmd_x(char *args)
     char *arg2=strtok(NULL," ");
     int n;
     lnaddr_t address;
+    bool success;
     sscanf(arg1,"%d",&n);
-    sscanf(arg2,"%x",&address);
+    address = expr(arg2,&success);
     while(n--)
     {
         printf("%x ",lnaddr_read(address,4));
