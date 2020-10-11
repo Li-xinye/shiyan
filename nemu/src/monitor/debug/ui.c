@@ -58,13 +58,13 @@ static int cmd_info(char *args)
 static int cmd_x(char *args)
 {
     
-    char *arg1=strtok(NULL," ");
-    char *arg2=strtok(NULL," ");
+    char *arg1=strtok(args," ");
     int n;
     lnaddr_t address;
     bool success;
     sscanf(arg1,"%d",&n);
-    address = expr(arg2,&success);
+    args = arg1+strlen(arg1)+1;
+    address = expr(args,&success);
     while(n--)
     {
         printf("%x ",lnaddr_read(address,4));
