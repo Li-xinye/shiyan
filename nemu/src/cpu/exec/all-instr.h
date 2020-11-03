@@ -9,6 +9,7 @@
 #include "data-mov/call.h"
 #include "data-mov/test.h"
 #include "data-mov/je.h"
+#include "data-mov/cmp.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
