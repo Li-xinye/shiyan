@@ -74,6 +74,18 @@ static void load_entry() {
 	fclose(fp);
 }
 
+static void init_CS()
+{
+	cpu.cs.base =0;
+	cpu.cs.limit = 0xffffffff;
+}
+
+
+static void init_cr0()
+{
+	cpu.cr0.protect_enable = 0;
+	cpu.cr0.paging = 0;
+}
 void restart() {
 	/* Perform some initialization to restart a program */
 #ifdef USE_RAMDISK
@@ -91,5 +103,6 @@ void restart() {
 	/* Initialize DRAM. */
 	init_ddr3();
 	init_cache();
-	
+	init_cr0();
+	init_CS();
 }
