@@ -58,7 +58,6 @@ static int cmd_info(char *args) {
 /* Add examine memory */
 static int cmd_x(char *args) {
 	char *arg = strtok(NULL, " ");
-	current_sreg=R_DS;
 	int n;
 	swaddr_t addr;
 	int i;
