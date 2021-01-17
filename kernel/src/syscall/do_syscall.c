@@ -35,4 +35,3 @@ void do_syscall(TrapFrame *tf) {
 		default: panic("Unhandled system call: id = %d, eip = 0x%08x", tf->eax, tf->eip);
 	}
 }
-

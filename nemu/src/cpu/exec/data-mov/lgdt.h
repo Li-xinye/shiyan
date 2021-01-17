@@ -1,5 +1,5 @@
-#ifndef _LGDT_H_
-#define _LGDT_H_
+#ifndef __LGDT_H__
+#define __LGDT_H__
 
 make_helper(lgdt_rm_v);
 
