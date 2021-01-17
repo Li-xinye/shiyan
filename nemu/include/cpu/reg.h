@@ -83,6 +83,11 @@ typedef struct {
 typedef struct{
 	union{
 		struct{
+			uint16_t limit1;
+			uint16_t base1;
+		};
+		uint32_t part1;
+		struct{
 			uint32_t base2:		8;
 			uint32_t a:			1;
 	      		uint32_t type:		3;

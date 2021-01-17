@@ -64,4 +64,5 @@ make_helper(mov_r2cr)
 	return 2;
 }
 #endif
+
 #include "cpu/exec/template-end.h"
