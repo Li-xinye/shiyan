@@ -82,3 +82,26 @@ uint32_t get_reg_val(const char *s, bool *success) {
 	return 0;
 }
 
+void sreg_load(uint8_t sreg_num)
+{
+	Assert(cpu.cr0.protect_enable,"Not in protect mode");
+	uint16_t idx = cpu.sreg[sreg_num].selector >> 3;
+	Assert((idx << 3) <= cpu.gdtr.limit,"Segement selector is out of the limit");
+
+	lnaddr_t chart_addr = cpu.gdtr.base + (idx << 3);
+	sreg_desc ->part1=lnaddr_read(chart_addr,4);
+	sreg_desc ->part2=lnaddr_read(chart_addr +4,4);
+	Assert(sreg_desc ->p ==1,"Segement not exist");
+	uint32_t bases = 0;
+	bases += ((uint32_t)sreg_desc ->base1);
+	bases += ((uint32_t)sreg_desc ->base2)<<16;
+	bases += ((uint32_t)sreg_desc ->base3)<<24;
+	cpu.sreg[sreg_num].base = bases;
+	uint32_t limits=0;
+	limits+=((uint32_t)sreg_desc->limit1);
+	limits+=((uint32_t)sreg_desc->limit2)<<16;
+	limits+=((uint32_t)0xfff)<<24;
+	cpu.sreg[sreg_num].limit=limits;
+	if(sreg_desc->g==1)
+		cpu.sreg[sreg_num].limit <<= 12;
+}
