@@ -87,6 +87,8 @@ typedef struct{
 			uint16_t base1;
 		};
 		uint32_t part1;
+	      };
+	union{
 		struct{
 			uint32_t base2:		8;
 			uint32_t a:			1;
@@ -102,7 +104,7 @@ typedef struct{
 			uint32_t base3:		8;
 		};
 		uint32_t part2;
-	};
+	    };
 }Sreg_Descripor;
 
 Sreg_Descripor *sreg_desc;
