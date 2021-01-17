@@ -58,6 +58,7 @@ static int cmd_info(char *args) {
 /* Add examine memory */
 static int cmd_x(char *args) {
 	char *arg = strtok(NULL, " ");
+	current_sreg=R_DS;
 	int n;
 	swaddr_t addr;
 	int i;
@@ -122,6 +123,7 @@ static int cmd_d(char *args) {
 
 /* Add display backtrace */
 static int cmd_bt(char *args) {
+	current_sreg=R_SS;
 	const char* find_fun_name(uint32_t eip);
 	struct {
 		swaddr_t prev_ebp;
